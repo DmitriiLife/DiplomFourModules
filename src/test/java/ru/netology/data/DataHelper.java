@@ -1,21 +1,17 @@
 package ru.netology.data;
 
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
 import lombok.Value;
 
-public class DataHelper {
-    private DataHelper() {
-    }
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-//    public static class Purchase {
-//        public static Purchase generateInfo(String locale) {
-//            Faker faker = new Faker(new Locale(locale));
-//            return new PurchaseInfo(
-//                    "1111222233334444",
-//                    faker.date().between().getMonth(),
-//                    faker.name().fullName(),
-//                    faker.phoneNumber().phoneNumber());
-//        }
-//    }
+public class DataHelper {
+    public static Faker faker = new Faker(new Locale("en"));
 
     @Value
     public static class PurchaseInfo {
@@ -26,21 +22,103 @@ public class DataHelper {
         private String code;
     }
 
-    public static PurchaseInfo getPurchaseInfoApproved() {
-        return new PurchaseInfo(
-                "1111222233334444",
-                "12",
-                "23",
-                "Ivanov",
-                "123");
+    public static String getApprovedNumber() {
+        return "1111 2222 3333 4444";
     }
 
-    public static PurchaseInfo getPurchaseInfoDeclined() {
-        return new PurchaseInfo(
-                "5555666677778888",
-                "11",
-                "22",
-                "Petrov",
-                "321");
+    public static String getCurrentMonth() {
+        LocalDate localDate = LocalDate.now();
+        return String.format("%02d", localDate.getMonthValue());
+    }
+
+    public static String getNextYear() {
+        LocalDate localDate = LocalDate.now();
+        return String.format("%ty", localDate.plusYears(1));
+    }
+
+    public static String getValidName() {
+        Faker faker = new Faker(new Locale("ru"));
+        return faker.name().firstName() + " " + faker.name().lastName();
+    }
+
+    public static String getCvcWithTwoDigits() {
+        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en"), new RandomService());
+        return fakeValuesService.numerify("##");
+    }
+
+    public static String getCvcWithOneDigit() {
+        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en"), new RandomService());
+        return fakeValuesService.numerify("#");
+    }
+
+    public static String getValidCvc() {
+        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en"), new RandomService());
+        return fakeValuesService.numerify("###");
+    }
+
+    public static String getNameWithOneLetter() {
+        return faker.lorem().characters(1);
+    }
+
+    public static String getNameWithNumbers() {
+        return faker.number().digits(7);
+    }
+
+    public static String getTooLongName() {
+        return faker.lorem().fixedString(3000);
+    }
+
+    public static String getOnlySurnameInLatinLetters() {
+        Faker faker = new Faker(new Locale("en"));
+        return faker.name().lastName();
+    }
+
+    public static String getOnlySurname() {
+        Faker faker = new Faker(new Locale("ru"));
+        return faker.name().lastName();
+    }
+
+    public static String getOnlyNameInLatinLetters() {
+        Faker faker = new Faker(new Locale("en"));
+        return faker.name().firstName();
+    }
+
+    public static String getOnlyName() {
+        Faker faker = new Faker(new Locale("ru"));
+        return faker.name().firstName();
+    }
+
+    public static String getLastYear() {
+        LocalDate localDate = LocalDate.now();
+        return String.format("%ty", localDate.minusYears(1));
+    }
+
+    public static String getLastMonth() {
+        LocalDate localDate = LocalDate.now();
+        LocalDate lastMonth = localDate.minusMonths(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
+        String monthValue = lastMonth.format(formatter);
+        return monthValue;
+    }
+
+    public static String getCurrentYear() {
+        return String.format("%ty", Year.now());
+    }
+
+    public static String getShortCardNumber() {
+        return "1111 2222 3333 444";
+    }
+
+    public static String getInvalidCardNumber() {
+        return "9999 9999 9999 9999";
+    }
+
+    public static String getDeclinedNumber() {
+        return "5555 6666 7777 8888";
+    }
+
+    public static String getValidNameInLatinLetters() {
+        Faker faker = new Faker(new Locale("en"));
+        return faker.name().firstName() + " " + faker.name().lastName();
     }
 }
